@@ -101,6 +101,12 @@ Try to answer these before class. Write your answers down, then check below.
 2. What is the difference between a Schema and a Table?
 3. Why might a Data Scientist prefer DuckDB over a traditional database server like PostgreSQL?
 
+```
+1. Alter Table
+2. Schema groups table together, a Table exists inside a schema
+3. No need to download additional software / packages, very easy to share and export, easier to do local analysis.
+```
+
 <details>
 <summary>Suggested answers</summary>
 

@@ -147,7 +147,14 @@ DROP TABLE lesson.users;      -- removes the table entirely
 ### 💬 Reflection
 
 - Why is organizing data into schemas important in a production environment?
+```
+You can have a huge number of datasets in a production environment, organising it into schemas helps.
+```
+
 - What happens if you try to insert a second row with the same `id`?
+```
+It will get rejected, you cannot have 2 rows with the same ID
+```
 
 ---
 
@@ -199,6 +206,15 @@ Complete the `CREATE TABLE` statement for the `students` table based on the ERD 
 
 > In a school system whose classes have students and teachers. Each student belongs to a single class. Each teacher may teach more than one class, but each class only has one teacher.
 
+```
+CREATE TABLE lesson.students (
+  id INTEGER PRIMARY KEY,       
+  name VARCHAR NOT NULL,
+  email VARCHAR NOT NULL,        
+  classes_id INTEGER REFERENCES lesson.classes(id)  -- foreign key
+)
+```
+
 ```dbml
 Table students {
   id int [pk]
@@ -229,6 +245,7 @@ Ref: students.class_id > classes.id // many-to-one
 Ref: classes.teacher_id > teachers.id // many-to-one
 ```
 
+
 <details>
 <summary>Solution</summary>
 
@@ -246,7 +263,14 @@ CREATE TABLE lesson.students (
 ### 💬 Reflection
 
 - What happens if you try to `INSERT` a student with a `class_id` that doesn't exist?
+
+```
+You add another row
+```
 - How do constraints prevent "bad data" from entering your analysis pipeline?
+```
+It is similar to data validation in Excel, if you do not fit the constraints set for the column, your input is rejected.
+```
 
 ---
 
@@ -294,6 +318,10 @@ Export with a `|` delimiter:
 COPY (SELECT * FROM lesson.students) TO '<full directory path>' WITH (HEADER 1, DELIMITER '|');
 ```
 
+```
+Make sure you export to a new file, not the existing file you pulled information from.
+```
+
 Export as JSON:
 
 ```sql
@@ -332,7 +360,14 @@ FROM lesson.students;
 ### 💬 Reflection
 
 - When should you *not* use an index?
+```
+When you don't have a very big / complex dataset
+```
 - How does using a View simplify the work for a Data Analyst who only needs specific columns?
+
+```
+Takes a large, complex dataset and simplifies it and shows the Analyst only what they need to see
+```
 
 ---
 

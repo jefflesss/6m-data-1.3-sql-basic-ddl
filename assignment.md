@@ -25,6 +25,32 @@ Task:
 
 Write the SQL DDL statements to create these three tables in a new schema called library.
 
+```sql
+CREATE SCHEMA library
+
+CREATE TABLE library.books(
+    id INTEGER PRIMARY KEY,
+    IBSN VARCHAR UNIQUE CHECK(LENGTH(IBSN) = 13) NOT NULL,
+    title VARCHAR NOT NULL,
+    author VARCHAR NOT NULL
+);
+
+CREATE TABLE library.members(
+    id INTEGER PRIMARY KEY,
+    membername VARCHAR NOT NULL,
+    email VARCHAR CHECK(CONTAINS(email, '@'))   UNIQUE NOT NULL,
+    joindate DATE NOT NULL
+)
+
+CREATE TABLE library.loans(
+    id INTEGER PRIMARY KEY,
+    member_id INTEGER NOT NULL REFERENCES library.members(id),  -- foreign key
+    book_id INTEGER NOT NULL REFERENCES library.books(id),  -- foreign key
+    loan_date DATE NOT NULL,
+    return_date DATE
+)
+```
+
 ## **Case Study 2: The "Marketing Dump" (Data Ingestion)**
 
 Scenario:
@@ -47,6 +73,22 @@ id,full_name,contact_info,signup_date
 1. **Create a Staging Table:** Create a table called marketing\_leads in the default (main) schema — no schema prefix needed. Since the source data is messy, be generous with your data types (use VARCHAR for almost everything to prevent import errors).  
 2. **Import Data:** Write the COPY command to load the CSV data into your table.  
 3. **Create a View:** Create a view called valid\_leads that filters out rows where the contact\_info does NOT contain an '@' symbol (excluding phone numbers).
+
+```sql
+CREATE TABLE marketing_leads(
+id INTEGER NOT NULL PRIMARY KEY,
+full_name VARCHAR,
+contact_info VARCHAR,
+signup_date VARCHAR
+)
+
+COPY marketing_leads FROM 'leads_raw.csv' (AUTO_DETECT TRUE);
+
+CREATE VIEW valid_leads AS
+SELECT id, full_name, contact_info, signup_date
+FROM marketing_leads
+WHERE CONTAINS(contact_info, '@') 
+```
 
 ---
 
